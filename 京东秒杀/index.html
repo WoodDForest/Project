@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>京东秒杀</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        .container{
+            width: 1200px;
+            margin: 0 auto;
+        }
+        .goodsDiv{
+            width: 290px;
+            height: 330px;
+            float: left;
+            background-color: white;
+            margin-left: 10px;
+            margin-bottom: 70px;
+        }
+        .goodsInfo{
+            color: #333;
+            font-size: 14px;
+            margin: 20px 0;
+            display: -webkit-box;
+            font-weight: 400;
+            text-align: left;
+            line-height: 20px;
+            height: 40px;
+            overflow: hidden;
+        }
+        .goodsDiv a{
+            margin: 0 30px;
+            display: block;
+            text-decoration: none;
+            position: relative;
+        }
+        .goodsDiv a img{
+            position: relative;
+            top: 20px;
+            transition: all 0.3s; /* 有初始值再加transition */
+        }
+        .goodsDiv a:hover img{
+            top: 12px;
+        }
+        .priceDiv{
+            border: 1px solid #e01222;
+            height: 62px;
+        }
+        .priceDiv div{
+            float: left;
+        }
+        .priceButton{
+            width: 89px;
+            height: 62px;
+            background-color: #e01222;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            line-height: 62px;
+            cursor: pointer;
+        }
+        .priceList{
+            width: 199px;
+            height: 62px;
+            background-color: white;
+        }
+        .nowPrice{
+            font-size: 24px;
+            color: #e01222;
+            font-family: arial;
+            margin-right: 2px;
+            line-height: 1;
+            display: inline-block;
+            margin-left: 10px;
+            margin-top: 15px;
+        }
+        .nowPrice::first-letter{
+            font-size: 14px;
+        }
+        .initPrice{
+            font-size: 14px;
+            color: #666;
+            text-decoration: line-through;
+            margin-left: 10px;
+        }
+        .soldOut{
+            font-size: 12px;
+            color: #666;
+            display: block;
+            margin-left: 12px;
+            margin-top: 3px;
+        }
+    </style>
+    <script src="js/Method.js"></script>
+</head>
+<body>
+    <script>
+        var container,table;;
+        // 本地商品数据(假数据)  商品列表
+        var goodsData=[
+            {id:1001,icon:"img/a.jpg",info:"康维佳 落地晾衣架单双杆升降伸缩式加厚不锈钢室内阳台 可移动简易晒衣架挂衣架晾晒架 单杆升级款",initPrice:"￥99",nowPrice:"￥29.9",soldOut:0.64},
+            {id:1002,icon:"img/b.jpg",info:"艾戈勒（agelocer）琉森系列瑞士进口男士手表 男表大日历全自动机械表皮带防水情侣表 银壳 数字 黑皮带 大日历 1102A1",initPrice:"￥3798",nowPrice:"￥1970",soldOut:0.33},
+            {id:1003,icon:"img/c.jpg",info:"EMPORIO ARMANI阿玛尼EA7男装 男士夏季纯棉圆领短袖T恤 97523黑色 L",initPrice:"￥709",nowPrice:"￥399",soldOut:0.29},
+            {id:1004,icon:"img/d.jpg",info:"十盏灯 TT-K2 主播声卡套装手机电脑通用麦克风 外置设备全套 户外直播套装【新年红】",initPrice:"￥398",nowPrice:"￥258",soldOut:0.38},
+            {id:1005,icon:"img/e.jpg",info:"卡帝乐鳄鱼(CARTELO) 拉杆箱耐磨防刮24英寸万向轮旅行李箱男女学生密码箱时尚轻盈商务休闲行李箱包 炫酷黑",initPrice:"￥429",nowPrice:"￥158",soldOut:0.26},
+            {id:1006,icon:"img/f.jpg",info:"回力/Warrior 回力官方旗舰店回天之力姊妹版CHAPING联名首发ins超火帆布鞋 WB-1L 耀眼白深蓝 42",initPrice:"￥128",nowPrice:"￥92",soldOut:0.98},
+            {id:1007,icon:"img/g.jpg",info:"【故宫出品】如意平安扣 纯银吊坠 男女士款项链 999足银饰品 转运浮雕刻字心经 毛衣链子",initPrice:"￥198",nowPrice:"￥178",soldOut:0.32},
+            {id:1008,icon:"img/h.jpg",info:"Meitu 美图V6 鹿特丹橙 6GB+128GB 全身美型 美颜 拍照 正品 手机 夜间美颜 双卡双4G 全网通",initPrice:"￥4999",nowPrice:"￥1599",soldOut:0.15}
+        ];
+         // 购物车列表
+        var shoppingList=[];
+
+        // 初始化，设置了背景，添加所有商品
+        init();
+        function init(){
+            document.body.style.backgroundColor="#f6f6f6";
+            var container=Method.$c("div",document.body);
+            container.className="container";
+            for(var i=0;i<goodsData.length;i++){
+                getGoodsIcon(goodsData[i],container);
+            }
+        }
+        
+        // 创建商品展示图标
+        function getGoodsIcon(goods,parent){
+            var goodsIcon=Method.$c("div",container);      // 创建div，起class名
+            goodsIcon.className="goodsDiv";
+            var a=Method.$c("a",goodsIcon);      // 创建a标签超链接
+            a.href="#";
+            var icon=Method.$c("img",a); // 创建图片
+            icon.src=goods.icon;
+            var info=Method.$c("h4",a);  // 创建文字内容
+            info.textContent=goods.info;
+            info.className="goodsInfo";
+            var priceDiv=Method.$c("div",goodsIcon); // 创建价格div
+            priceDiv.className="priceDiv";
+            var price=Method.$c("div",priceDiv);  // priceDiv里面左边div
+            price.className="priceList";
+            var bn=Method.$c("div",priceDiv);     // 右边div
+            bn.className="priceButton";
+            bn.textContent="立即抢购";
+            bn.addEventListener("click",clickHandler);
+            var nowPrice=Method.$c("span",price); // 现价
+            nowPrice.className="nowPrice";
+            nowPrice.textContent=goods.nowPrice;  // 获取现价数据
+            var initPrice=Method.$c("span",price);// 原价
+            initPrice.className="initPrice";
+            initPrice.textContent=goods.initPrice;// 获取原价数据
+            var soldOut=Method.$c("span",price);  // 已售
+            soldOut.className="soldOut";
+            soldOut.textContent="已售"+Math.round(goods.soldOut*100)+"%";
+            var soldBlock=Method.$c("span",soldOut,{ // 已售进度条(灰)
+                width:"88px",
+                height:"8px",
+                display:"inline-block",
+                backgroundColor:"#666",
+                marginLeft:"10px"
+            });
+            var redBlock=Method.$c("span",soldBlock,{
+                width:88*goods.soldOut+"px",
+                height:"8px",
+                display:"block",
+                backgroundColor:"#e01222"
+            });
+            bn.data=goods; // 给按钮赋值，为方便点击获取
+            parent.appendChild(goodsIcon);
+            return goodsIcon;
+        }
+
+
+
+
+
+        // js中对象遍历的先后顺序是按照该属性的定义先后顺序
+
+        // 根据传入的参数数组，创建表格
+        function createTable(data){
+            // 清除当前表格中的内容
+            clearTable();
+            // 创建表头
+            var thr=Method.$c("tr",table,{   // 创建表格标题行
+                borderTop:"1px solid #666",
+                borderBottom:"1px solid #666"
+            });
+            var arr=["全选","商品","","单价","数量","小计","操作"];
+            for(var i=0;i<arr.length;i++){   // 创建表格标题
+                var th=Method.$c("th",thr);
+                if(i===0){
+                    createCheckbox(th,judgeCheckAll());   // 在创建表头的时候，判断是否全选,得到是否全选的条件
+                }
+                var text=document.createTextNode(arr[i]);//创建文本节点,放入文字
+                th.appendChild(text);
+            }
+            // 根据数据创建表格的行和列，并且在里面加入对应的图片，文本等等
+            for(var j=0;j<data.length;j++){   // 创建商品信息行
+                var tr=Method.$c("tr",table,{
+                    border:"1px solid #000000"
+                });
+                for(var key in data[j]){         // 往里面放入元素
+                    if(key==="id") continue;  // 遇到id跳过
+                    var td=Method.$c("td",tr,{
+                        textAlign:"center"
+                    });// 创建单元格
+                    switch(key){
+                        case "select":
+                            createCheckbox(td,data[j][key],data[j]);
+                            break;
+                        case "icon":
+                            createImg(td,data[j][key]);
+                            break;
+                        case "num":
+                            createStepNumber(td,data[j]);
+                            break;
+                        case "deleted":
+                            var a=Method.$c("a",td,{textDecoration: "none",color:"#000000"});
+                            a.textContent="删除";
+                            a.href="#";
+                            a.data=data[j];  // 定义对象，为了能找到a
+                            a.addEventListener("click",removeItemHandler); // 点击事件
+                            break;
+                        case "price":
+                        case "sum":
+                            td.textContent="￥";
+                        case "info":
+                            td.textContent+=data[j][key];
+                            break;
+                    }
+                }
+            }
+        }
+        
+        // 创建多选框
+        // 参数  parent  父容器
+        //      checked  是否被选中
+        //      data  如果当前选择框对应的是一个商品对象，这个data就是商品对象
+        //            如果是全选，这个data没有赋值，就是不存在
+        function createCheckbox(parent,checked,data){
+            if(!checked) checked=false;             // 没别选中
+            var checkbox=Method.$c("input",parent); // 多选框,放进不同父级
+            checkbox.type="checkbox";
+            checkbox.checked=checked;
+            checkbox.data=data;// data赋值给多选框
+            checkbox.addEventListener("click",checkboxClickHandler);
+            return checkbox;
+        }
+
+        // 创建图片
+        // 参数  parent  父容器
+        //       src     图片地址
+        function createImg(parent,src){
+            var img=Method.$c("img",parent);
+            img.src=src;
+            img.style.width="80px";
+            img.style.height="80px";
+        }
+
+        // 创建计数器
+        // 参数  parent  父容器
+        //       item   当前计数器对应的商品对象
+        function createStepNumber(parent,item){
+            var div=Method.$c("div",parent);
+            var style={
+                width:"30px",
+                height:"30px",
+                backgroundColor:"#FFFFFF",
+                border:"1px solid #000000",
+                textAlign:"center",
+                margin:0,
+                padding:0
+            };
+            var leftBn=Method.$c("button",div,style);// 创建左按钮
+            leftBn.textContent="-";
+            style.width="60px"; // 修改input宽度
+            style.height="28px";//          高度
+            style.borderLeft="none";//     左边框
+            style.borderRight="none";//    右边框
+            var input=Method.$c("input",div,style);
+            input.value=item.num;
+            style.width="30px"; // 改回按钮宽度
+            style.height="30px"; // 改回按钮高度
+            style.borderLeft="1px solid #000000";
+            style.borderRight="1px solid #000000";
+            var rightBn=Method.$c("button",div,style);// 创建右按钮
+            rightBn.textContent="+";
+            leftBn.addEventListener("click",stepNumClickHandler);// 点击事件
+            rightBn.addEventListener("click",stepNumClickHandler);
+            leftBn.data=item;
+            rightBn.data=item;
+            return div;
+        }
+        
+        // 单例模式
+        // 清除表格
+        // 如果表格不存在，先创建表格
+        // 清除表格中所有元素中有data属性和事件侦听
+        // 最后将所有的行都删除掉
+        function clearTable(){
+            if(!table){
+                table=Method.$c("table",document.body,{ // 不存在就创建表格
+                    width:"1550px",
+                    borderCollapse:"collapse",
+                    border:"1px solid #666"
+                });
+                return;
+            }
+            var len=table.children.length;  // 获取表格长度
+            // 点击删除，清除元素事件
+            for(var j=0;j<len;j++){ // 不算th,从第一行开始
+                    var check=table.children[j].children[0].firstElementChild;
+                    check.data=null;
+                    check.removeEventListener("click",checkboxClickHandler);
+                    if(j===0) continue;
+                    var div=table.children[j].children[4].firstElementChild;
+                    var leftBn=div.firstElementChild;
+                    var rightBn=div.lastElementChild;
+                    leftBn.data=null; // 引用设为空
+                    rightBn.data=null;// 不引用
+                    leftBn.removeEventListener("click",stepNumClickHandler);// 删除事件侦听
+                    rightBn.removeEventListener("click",stepNumClickHandler);
+                    var a=table.children[j].lastElementChild.firstElementChild;
+                    a.data=null;
+                    a.removeEventListener("click",removeItemHandler);
+            }
+            for(var i=0;i<len;i++){
+                table.lastElementChild.remove(); // 删除最后一项不需要往前补位，效率高
+            }
+        }
+
+
+        // 事件函数
+        // 点击商品图标时，添加商品
+        // 1、先在购物车中查找是否有点击的商品id，如果有就增加该商品对象的num和修改sum
+        // 2、如果没有找到，创建一个商品对象，并且放在购物车数组中
+        // 3、删除刷新表格
+        function clickHandler(e){
+            e = e || window.event;
+            var data=this.data; // 把点击的data转换
+            var item=shoppingList.filter(function (t){ // 筛选数据
+                return t.id===data.id;  // 筛选相同id的值
+            })[0];
+            if(item){         // 如果满足商品已在购物车中
+                item.num++;   // 商品数量增加
+                item.sum=(item.price*item.num).toFixed(2);
+                createTable(shoppingList);
+                return;
+            }
+            item={            // 否则创建表格并获取信息
+                select:false,
+                id:data.id,
+                icon:data.icon,
+                info:data.info,
+                price:Number(data.nowPrice.slice(1)),
+                num:1,
+                sum:0,
+                deleted:false
+            };
+            item.sum=(item.price*item.num).toFixed(2);
+            shoppingList.push(item);
+            createTable(shoppingList);
+        }
+
+        // 当点击计数器+-时
+        // 直接修改这个计数器对应的商品对象的num和sum，
+        // 然后更新表格
+        function stepNumClickHandler(e){
+            e = e || window.event;
+            if(this.textContent==="+"){
+                if(this.data.num===99) return;
+                this.data.num++;
+            }else{
+                if(this.data.num===1) return;
+                this.data.num--;
+            }
+            this.data.sum=(this.data.price*this.data.num).toFixed(2);
+            createTable(shoppingList);// 创建表格->增加商品数量
+        }
+
+        // 点击删除购物车元素
+        // 查找被点击的这个列表中的商品对象在购物车中是哪一个，将这个被找到的排除掉，
+        // 购物车里就只剩下没有被删除的
+        // 更新表格
+        function removeItemHandler(e){
+            e = e || window.event;
+            // 先定义好this，否则容易不一样,这里的data就是a超链接的data
+            // 属性，而这个属性又是shoppingList数组中对应对象的引用对象
+            var data=this.data; 
+            shoppingList=shoppingList.filter(function (t){// 筛选对象是否一样
+                return t!=data;
+            })
+            createTable(shoppingList);// 创建表格->删除商品
+        }
+
+        // 当点击购物车中的多选框时
+        // 如果data存在，就说明当前这项的对象存在，就不是表头，如果不存在就是表头
+        // 如果是表头，就将所有的购物车列表中的select属性修改成与表头多选框的选中相同
+        // 如果不是表头，将直接将当前多选框的选中判断存储在当前这个商品对象的select中
+        // 更新表格
+        function checkboxClickHandler(e){
+            e = e || window.event;
+            var data=this.data;
+            if(!data){              //是非表示全选
+                var checked=this.checked;
+                shoppingList.forEach(function(t){// 遍历
+                    t.select=checked;// 替换给每一个select
+                })
+            }else{
+                data.select=this.checked;// 记录多选框被选中
+            }
+            createTable(shoppingList);// 记录选中，添加商品不影响选中
+        }
+
+        // 判断当前购物车是否每个元素都被选中了，如果是返回true，否则返回false
+        function judgeCheckAll(){
+            return shoppingList.every(function(t){
+                return t.select===true;
+            })
+        }
+
+        
+    </script>
+</body>
+</html>
+
