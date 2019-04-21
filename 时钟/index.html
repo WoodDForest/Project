@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>时钟</title>
+    <style>
+    .clearfixed::after{
+        display: table;
+        content: "";
+        clear: both;
+    }
+    div div{
+        float: left;
+        width: 50px;
+        font-size: 180px;
+        margin: 0 auto;
+    }
+    #dian{
+        margin-top: 40px;
+        width: 70px;
+        height: 200px;
+        line-height: 200px;
+        text-align: center;
+        color: peru;
+    }
+    #hour0,#hour1,#minute0,#minute1,#second0,#second1{
+        width: 170px;
+        height: 270px;
+        background-image: url("img/num.png");
+        /* background-position: -190px -255px; */
+
+    }
+    </style>
+</head>
+<body>
+    <div>
+        <div id="hour0"></div>
+        <div id="hour1"></div>
+        <div id="dian" class="clearfixed">:</div>
+        <div id="minute0"></div>
+        <div id="minute1"></div>
+        <div id="dian" class="clearfixed">:</div>
+        <div id="second0"></div>
+        <div id="second1"></div>
+    </div>
+    <script>
+    var hour0,hour1,minute0,minute1,second0,second1;
+    var imgPositionList=[];
+
+
+    init();
+    function init(){
+        hour0=document.getElementById("hour0");
+        hour1=document.getElementById("hour1");
+        minute0=document.getElementById("minute0");
+        minute1=document.getElementById("minute1");
+        second0=document.getElementById("second0");
+        second1=document.getElementById("second1");
+        for(var i=0;i<10;i++){
+            if(i<5){
+                imgPositionList.push({x:-i*190,y:0});
+                continue;
+            }
+            imgPositionList.push({x:-(i-5)*190,y:-270});
+        }
+        imgPositionList.unshift(imgPositionList.pop());//把最后的0放在前面
+        setInterval(animation,16);
+    }
+
+    function animation(){
+        var date=new Date();
+        var hours=date.getHours().toString().split("").map(function(t) { return getNum(t)});
+        var minutes=date.getMinutes().toString().split("").map(function(t) { return getNum(t) });
+        var seconds=date.getSeconds().toString().split("").map(function(t) { return getNum(t) });
+        getDoubleArr(hours);
+        getDoubleArr(minutes);
+        getDoubleArr(seconds);
+        setTimeDiv(hour0,hours[0]);
+        setTimeDiv(hour1,hours[1]);
+        setTimeDiv(minute0,minutes[0]);
+        setTimeDiv(minute1,minutes[1]);
+        setTimeDiv(second0,seconds[0]);
+        setTimeDiv(second1,seconds[1]);
+    }
+
+
+    function getDoubleArr(arr){
+        if(arr.length===1) arr.unshift(0);
+        return arr;
+    }
+
+    function setTimeDiv(elem, num) {
+        clone(elem.style,{
+            backgroundPositionX: imgPositionList[num].x + "px",
+            backgroundPositionY: imgPositionList[num].y + "px"
+        });
+    }
+    function getNum(str){
+        if(isNaN(Number(str))) return str;
+        return Number(str);
+    }
+    function clone(target,source){
+        for(var key in source){
+            target[key]=source[key];
+        }
+    }
+    
+    </script>
+</body>
+</html>

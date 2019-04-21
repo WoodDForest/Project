@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>中文动态时钟</title>
+</head>
+<body>
+    <script>
+    var chr=['零','一','二','三','四','五','六','七','八','九','十'];
+    var weeks=['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
+    init();
+    
+    function init(){
+        setInterval(animation,16);
+    }
+
+    function animation(){
+        document.body.innerHTML=getDate();
+    }
+
+    function getDate(){
+        var date=new Date();
+        return getYears(date.getFullYear())+"年"
+        +getChrNumber(date.getMonth()+1)+"月"
+        +getChrNumber(date.getDate())+"日"
+        +" "+weeks[date.getDay()]
+        +" "+getChrNumber(date.getHours())+"点"
+        +getChrNumber(date.getMinutes())+"分"
+        +getChrNumber(date.getSeconds())+"秒 "
+        // +getChrNumber(date.getMilliseconds())+"毫秒";
+    }
+
+    function getChrNumber(num){
+        if(num>=1000 || num<0) return;
+        if(num<11) return chr[num];
+        if(num<100 && num%10===0) return chr[num/10]+"十";
+        if(num<20) return "十"+chr[num%10];
+        if(num<100) return chr[parseInt(num/10)]+"十"+chr[num%10];
+        var str=chr[parseInt(num/100)]+"百";
+        if(num%100===0) return str;
+        if(num%10===0) return str+chr[parseInt(num/10)%10]+"十";
+        if(parseInt(num/10)%10===0) return str+"零"+chr[num%10];
+        return str+chr[parseInt(num/10)%10]+"十"+chr[num%10];
+    }
+
+    function getYears(year){
+        var arr=year.toString().split("").map(function(t){ return getNumber(t) });
+        return arr.map(function(t){ return chr[t] }).join("");
+    }
+
+    function getNumber(str){
+        if(!isNaN(Number(str))) return Number(str);
+        return str;
+    }
+    </script>
+</body>
+</html>

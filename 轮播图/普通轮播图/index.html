@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>普通轮播图</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #carousel,#imgCon img{
+            width: 1100px;
+            height: 600px;
+        }
+        #carousel{
+            position: relative;
+            margin: auto;
+            overflow: hidden;
+        }
+        #imgCon{
+            width: 5500px;
+            height: 600px;
+            position: absolute;
+            left: 0;
+            font-size: 0;
+            transition: all 1s;
+        }
+        #leftBn,#rightBn{
+            position: absolute;
+            top: 270px;
+        }
+        #leftBn{
+            left: 20px;
+        }
+        #rightBn{
+            right: 20px;
+        }
+        ul{
+            position: absolute;
+            bottom: 50px;
+            list-style: none;
+        }
+        li{
+            width: 20px;
+            height: 20px;
+            border: 2px solid darkorange;
+            border-radius: 10px;
+            float: left;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="carousel">
+        <div id="imgCon">
+            <img src="img/a.jpg">
+            <img src="img/b.jpg">
+            <img src="img/c.jpg">
+            <img src="img/d.jpg">
+            <img src="img/e.jpg">
+        </div>
+        <ul>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <img src="img/left.png" id="leftBn">
+        <img src="img/right.png" id="rightBn">
+    </div>
+    <script>
+        // 数据驱动显示:修改数据,由数据显示修改内容
+        var imgCon,leftBn,rightBn,lis,ul,prevLi;
+        var position=0;// 当前所在是第几张图
+        init();
+        function init(){
+            imgCon=document.getElementById("imgCon");
+            leftBn=document.getElementById("leftBn");
+            rightBn=document.getElementById("rightBn");
+            lis=document.getElementsByTagName("li");
+            ul=document.getElementsByTagName("ul")[0];
+            leftBn.addEventListener("click",clickHandler);
+            rightBn.addEventListener("click",clickHandler);
+            for(var i=0;i<lis.length;i++){
+                lis[i].num=i;
+                lis[i].addEventListener("click",liClickHandler);
+            }
+            ul.style.left=(1100-ul.offsetWidth)/2+"px";
+            changeLi();
+        }
+
+        function clickHandler(e){
+            e = e || window.event;
+            if(this===leftBn){
+                position--;
+                if(position<0) position=4;
+            }else if(this===rightBn){
+                position++;
+                if(position>4) position=0;
+            }
+            changeImg();
+        }
+
+        function liClickHandler(e){
+            e = e || window.event;
+            position=this.num;
+            changeImg();
+        }
+
+        function changeImg(){
+            imgCon.style.left=-position*1100+"px";
+            changeLi();
+        }
+
+        function changeLi(){
+            if(prevLi){
+                prevLi.style.backgroundColor="rgba(255,120,0,0)";
+            }
+            prevLi=lis[position];
+            prevLi.style.backgroundColor="rgba(255,120,0,0.5)";
+        }
+    </script>
+</body>
+</html>

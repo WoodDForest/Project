@@ -1,0 +1,22 @@
+body{
+    height: 750px;
+    margin: 0;
+    padding: 0;
+}
+.ad{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    width: 400px;
+    height: 0px;
+    border: 2px solid black;
+}
+.btn{
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+}
+.bg{
+    width: 400px;
+}

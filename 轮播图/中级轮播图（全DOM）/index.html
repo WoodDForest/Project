@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>中级轮播图</title>
+    <script src="js/Method.js"></script>
+</head>
+<body>
+    <script>
+        var imgCon,ul,prevLi;
+        var arr=["img/a.jpg","img/b.jpg","img/c.jpg","img/d.jpg","img/e.jpg"];
+        var position=0;         // 图片位置
+        var direction="";       // 移动方向
+        var carouselBool=false;
+        var autoBool=false;
+        var time=240;           // 4秒时间进入240次
+        const WIDTH=1100;
+        const HEIGHT=600;
+        init();
+        function init(){
+            createCarousel();
+            createLiAndImg();
+            changeLi();
+            setInterval(animation,16);
+        }
+
+        function createCarousel(){
+            var carousel=Method.$c("div",document.body,{
+                width: WIDTH+"px",
+                height: HEIGHT+"px",
+                position: "relative",
+                margin: "auto",
+                overflow: "hidden"
+            });
+            carousel.addEventListener("mouseenter",mouseHandler);// 鼠标移入
+            carousel.addEventListener("mouseleave",mouseHandler);// 鼠标移出
+            imgCon=Method.$c("div",carousel,{
+                width: WIDTH+"px",
+                height: HEIGHT+"px",
+                position: "absolute",
+                left: 0,
+                fontSize: 0
+            });
+            ul=Method.$c("ul",carousel,{
+                position: "absolute",
+                bottom: "50px",
+                listStyle: "none",
+                margin: "auto"
+            });
+            var leftBn=Method.$c("img",carousel,{
+                position: "absolute",
+                left: "20px",
+                top: "270px"
+            });
+            leftBn.src="img/left.png";
+            var rightBn=Method.$c("img",carousel,{
+                position: "absolute",
+                right: "20px",
+                top: "270px"
+            });
+            rightBn.src="img/right.png";
+            // leftBn.style.top=rightBn.style.top=(HEIGHT-leftBn.clientHeight)/2+"px";
+            // 预加载以后才有
+            leftBn.addEventListener("click",clickHandler);
+            rightBn.addEventListener("click",clickHandler);
+        }
+
+        function createLiAndImg(){
+            for(var i=0;i<arr.length;i++){
+                var li=Method.$c("li",ul,{
+                    width: "20px",
+                    height: "20px",
+                    border: "2px solid darkorange",
+                    borderRadius: "10px",
+                    float: "left",
+                    marginLeft: "8px"
+                })
+                li.num=i;
+                li.addEventListener("click",liClickHandler);
+            }
+            ul.style.left=(WIDTH-ul.offsetWidth)/2+"px";
+            var img=Method.$c("img",imgCon,{
+                width: WIDTH+"px",
+                height: HEIGHT+"px"
+            });
+            img.src=arr[position];
+        }
+
+        function mouseHandler(e){
+            e = e || window.event;
+            if(e.type==="mouseenter"){
+                autoBool=false;
+            }else if(e.type==="mouseleave"){
+                autoBool=true;
+            }
+        }
+
+        function clickHandler(e){
+            e = e || window.event;
+            if(carouselBool) return; // 图片切换中其它按钮失效
+            if(~this.src.indexOf("left")){
+                position--;
+                if(position<0) position=arr.length-1;
+                direction="right";
+            }else{
+                position++;
+                if(position>arr.length-1) position=0;
+                direction="left";
+            }
+            createCarouselImg();// 创建运行
+        }
+        
+        function liClickHandler(e){
+            e = e || window.event;
+            if(carouselBool) return; // 不允许图片切换过程中点击小圆点
+            if(this.num===position) return;
+            if(this.num>position){
+                direction="left";
+            }else{
+                direction="right";
+            }
+            position=this.num;
+            createCarouselImg();
+        }
+
+        function createCarouselImg(){
+            if(direction!=="left" && direction!=="right") return;
+            var img=Method.$c("img",null,{
+                width: WIDTH+"px",
+                height: HEIGHT+"px"
+            });
+            img.src=arr[position];
+            imgCon.style.width=WIDTH*2+"px";// 把容器容量扩充一倍
+            if(direction==="left"){
+                imgCon.appendChild(img);
+            }else if(direction==="right"){
+                imgCon.insertBefore(img,imgCon.firstElementChild);
+                imgCon.style.left=-WIDTH+"px";
+            }
+            changeLi();
+            carouselBool=true;
+        }
+
+        function changeLi(){
+            if(prevLi){
+                prevLi.style.backgroundColor="rgba(255,120,0,0)";
+            }
+            prevLi=ul.children[position];
+            prevLi.style.backgroundColor="rgba(255,120,0,0.5)"
+        }
+
+        function animation(){
+            carouselMoive();
+            carouselAuto();
+        }
+        // 处理动画运行
+        function carouselMoive(){
+            if(!carouselBool) return;
+            if(direction==="left"){
+                if(imgCon.offsetLeft<=-WIDTH){
+                    carouselBool=false;
+                    imgCon.firstElementChild.remove();
+                    imgCon.style.left="0px";
+                    return;
+                }
+                imgCon.style.left=imgCon.offsetLeft-20+"px";
+            }else if(direction==="right"){
+                if(imgCon.offsetLeft>=0){
+                    carouselBool=false;
+                    imgCon.lastElementChild.remove();
+                    return;
+                }
+                imgCon.style.left=imgCon.offsetLeft+20+"px";
+            }
+        }
+        // 自动轮播
+        function carouselAuto(){
+            if(!autoBool) return;
+            time--;
+            if(time>0) return;
+            // 当time减到0时，就不继续减了，进入下面
+            time=240;
+            position++;
+            if(position>arr.length-1) position=0;
+            direction="left";
+            createCarouselImg();
+        }
+    </script>
+</body>
+</html>

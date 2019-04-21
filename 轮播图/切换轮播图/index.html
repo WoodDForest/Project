@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>切换轮播图</title>
+    <style>
+        #con,#bgImg,#bgImg img{
+            width: 1080px;
+            height: 560px;
+        }
+        #con{
+            position: relative;
+            margin: auto;
+        }
+        #bgImg{
+            position: absolute;
+        }
+        #bgImg img{
+            opacity: 1;
+            transition: all 1s;
+            position: absolute;
+            left: 0;
+            top: 0; 
+        }
+        #iconImg{
+            position: absolute;
+            width: 156px;
+            right: 50px;
+            top: 12px;
+        }
+        #iconImg img{
+            margin: 6px 0;
+            border: 2px solid #FFA50000;
+            transition: all 0.5s;
+        }
+    </style>
+    <script src="js/Method.js"></script>
+</head>
+<body>
+    <div id="con">
+        <div id="bgImg">
+            <img src="img/a.jpg">
+        </div>
+        <div id="iconImg">
+            <img src="img/icon_a.jpg">
+            <img src="img/icon_b.jpg">
+            <img src="img/icon_c.jpg">
+            <img src="img/icon_d.jpg">
+            <img src="img/icon_e.jpg">
+        </div>
+    </div>
+    <script>
+        var bgImg,iconImg,preImg,imgList;
+        var arr=["img/a.jpg","img/b.jpg","img/c.jpg","img/d.jpg","img/e.jpg"];
+        init();
+        function init(){
+            Method.loadImage(arr,loadFinishHandler)
+        }
+        function loadFinishHandler(list){
+            imgList=list;
+            bgImg=document.getElementById("bgImg");
+            iconImg=document.getElementById("iconImg");
+            for(var i=0;i<iconImg.children.length;i++){
+                iconImg.children[i].num=i;
+                iconImg.children[i].addEventListener("click",clickHandler);
+            }
+            changeBorder(iconImg.firstElementChild);
+        }
+
+        function clickHandler(e){
+            e = e || window.event;
+            changeBorder(this);
+            changeImg(this.num);
+        }
+
+        function changeBorder(elem){
+            if(preImg){
+                preImg.style.border="2px solid #FFA50000";
+            }
+            preImg=elem;
+            preImg.style.border="2px solid #FFA500";
+        }
+
+        function changeImg(index){
+            if(bgImg.children.length>1){
+                bgImg.lastElementChild.remove();
+            }
+            bgImg.lastElementChild.style.opacity="0";
+            imgList[index].style.opacity="1";
+            bgImg.insertBefore(imgList[index],bgImg.lastElementChild);
+        }
+    </script>
+</body>
+</html>

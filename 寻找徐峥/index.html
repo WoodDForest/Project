@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>寻找徐峥</title>
+</head>
+<body>
+    <script>
+        var divs;
+        var lv=1;//当前等级
+        var arr=[];
+        init();
+        //初始化
+        function init(){
+            divs=$c("div",document.body,{
+                width:"600px",
+                height:"700px",
+                border:"1px solid #000000",
+                fontSize:"0px",
+                margin:"auto"
+            });
+            creatGame();
+        }
+
+        // 定义方法，设置图片
+        function creatGame(){
+            var width=600/(lv+1);
+            var height=700/(lv+1);
+            
+            for(var i=0;i<Math.pow(lv+1,2);i++){//等级的平方
+                var img=$c("img",null,{
+                    width:width+"px",
+                    height:height+"px"
+                });
+                img.src="img/bao.jpg";
+                arr.push(img);
+            }
+            arr[0].src="img/xu.jpg";
+
+            arr.sort(function(){
+                return Math.random()-0.5;
+            })
+
+            for(var j=0;j<arr.length;j++){
+                divs.appendChild(arr[j]);
+                arr[j].addEventListener("click",clickHandler); 
+            }
+        }
+
+        // 清空前一次的图片
+        function clearGame(){
+            for(var i=0;i<arr.length;i++){
+                divs.removeChild(arr[i]);
+                arr[i].removeEventListener("click",clickHandler);//清除监听事件
+                arr[i]=null; //对象设置为空
+            }
+            arr.length=0;
+        }
+
+        // 定义点击事件
+        function clickHandler(e){
+            e=e || window.event;
+            if(~this.src.indexOf("xu.jpg")){
+                lv++;
+                clearGame();
+                creatGame();
+                return;
+            }
+            alert("你点错了");
+        }
+
+        // 定义创建节点的方法
+        function $c(type,parent,style){
+            var elem=document.createElement(type);
+            if(parent) parent.appendChild(elem);
+            for(var key in style){
+                elem.style[key]=style[key];
+            }
+            return elem;
+        }
+    </script>
+</body>
+</html>

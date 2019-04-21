@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>秒表</title>
+    <style>
+    #showTime{
+        width: 300px;
+        height: 60px;
+        font-size: 60px;
+        line-height: 60px;
+    }
+    </style>
+</head>
+<body>
+    <div>
+        <div id="showTime">00:00:00</div>
+        <button id="startBn">启动</button>
+        <button id="restBn">复位</button>
+    </div>
+    <script>
+    var time,showTime,startBn,restBn,pauseDate;
+    var bool=false;
+    var startBool=false;
+    //暂停的累计时间
+    var pauseTime=0;
+    init();
+    function init(){
+        showTime=document.getElementById("showTime");
+        startBn=document.getElementById("startBn");
+        restBn=document.getElementById("restBn");
+        startBn.addEventListener("click",clickHandler);
+        restBn.addEventListener("click",clickHandler);
+        setInterval(animation,16);
+    }
+
+    function animation(){
+        if(!bool) return;
+        //当前时间减去上次开启时间再减去暂停累计时间
+        var times=new Date().getTime()-time-pauseTime;
+        var minutes=Math.floor(times/60000);
+        var seconds=Math.floor((times-minutes*60000)/1000);
+        var ms=Math.floor((times-minutes*60000-seconds*1000)/10);
+        showTime.innerHTML=(minutes<10 ? "0"+minutes : minutes)+":"
+                          +(seconds<10 ? "0"+seconds : seconds)+":"
+                          +(ms<10 ? "0"+ms : ms);
+    }
+
+    function clickHandler(e){
+        e = e || window.event;
+        if (this === startBn) {
+            bool = !bool;
+            if (bool) {
+                if(!startBool){
+                    time=new Date().getTime();
+                    startBool=true;
+                }
+                this.innerHTML = "暂停";
+                //如果上一次暂停时间是空，表示没有暂停过，因此直接返回0
+                //如果上次的暂停时间是有值的，用当前毫秒数减去上次的毫秒数，
+                //这样就会得到暂停时间
+                pauseTime += (!pauseDate ? 0 : new Date().getTime() - pauseDate);
+            } else {
+                this.innerHTML = "启动";
+                pauseDate = new Date().getTime();
+            }
+            return;
+        }
+        startBn.innerHTML="启动";
+        pauseTime=0;
+        pauseDate=null;
+        bool=false;
+        time=0;
+        showTime.innerHTML="00:00:00";
+        startBool=false;
+    }
+    </script>
+</body>
+</html>
