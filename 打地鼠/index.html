@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>打地鼠</title>
+		<link rel="stylesheet" href="css/mouse.css" />
+	</head>
+	<body>
+		<!--标题-->
+		<div class="title">
+			<!--使用marquee标签不仅可以移动文字，
+			也可以移动图片、表格等等-->
+			<!--direction 滚动方向
+				behavior  滚动方式
+				scrollamount 移动速度(改变步长)
+			-->
+			<marquee direction="right" behavior="alternate" scrollamount="25">打我呀！ 打我呀！</marquee>
+<!--			<marquee>
+				<img src="img/2.gif" />
+			</marquee>-->
+		</div>
+		<div class="title"></div>
+		<!--草坪-->
+		<div id="gameDiv">
+			<img src="img/5.jpg" onclick="beat(this)" />
+			<img src="img/5.jpg" onclick="beat(this)" />
+			<img src="img/5.jpg" onclick="beat(this)" />
+			<img src="img/5.jpg" onclick="beat(this)" />
+			<img src="img/5.jpg" onclick="beat(this)" />
+			<img src="img/5.jpg" onclick="beat(this)" />
+			<img src="img/5.jpg" onclick="beat(this)" />
+			<img src="img/5.jpg" onclick="beat(this)" />
+			<img src="img/5.jpg" onclick="beat(this)" />
+		</div>
+		<!--计分框-->
+		<p id="score">得分：0分</p>
+		<p id="time">倒计时：60s</p>
+		<div class="btn">
+			<button id="btn">START</button>
+		</div> 
+		
+	<script type="text/javascript" src="js/mouse.js" ></script>
+	</body>
+</html>
