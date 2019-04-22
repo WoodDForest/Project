@@ -1,0 +1,45 @@
+@charset "utf-8";
+
+*{
+	margin: 0;
+	padding: 0;
+}
+
+body{
+	background: pink;
+}
+
+.box{
+	position: absolute;
+	width: 500px;
+	height: 350px;
+	background: indianred;
+	left: 50%;
+	margin-left: -250px;
+	top: 100px;
+}
+
+h1{
+	color: navajowhite;
+	text-align: center;     /*文字水平居中*/
+	height:80px;
+	line-height: 80px;
+}
+
+.bigpic{
+	width: 280px;
+	height: 196px;
+	border: 2px solid ghostwhite;
+	margin-left: 50px;
+	float: left;          /*前一个人浮动*/
+    overflow: hidden;     /*显示多余，隐藏*/
+}
+
+.smallpic{
+	width: 76px;
+	height: 196px;
+	border: 2px solid ghostwhite;
+	float: left;
+	margin-left: 30px;
+	overflow-y: auto;/*Y轴多余部分自适应显示*/
+}

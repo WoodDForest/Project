@@ -1,0 +1,103 @@
+@charset "utf-8";
+
+*{
+	margin: 0;
+	padding: 0;
+}
+
+.demo{
+	width: 410px;
+	margin: 100px auto;
+}
+/*设置锯齿状*/
+.stamp{
+	position: relative;
+	font-family: "microsoft yahei";
+	width: 387px;
+	height: 140px;
+	background: #f39b00;
+	/*渐变色 默认从中心开始，中心0~5白色   5之外橘色*/
+	background: radial-gradient(rgb(0,0,0,0) 0px,rgba(0,0,0,0) 5px,#F39B00 5px);
+	background-size: 15px 15px;
+	background-position: 9px 3px;
+	padding: 0 10px;
+}
+
+.stamp:before{
+	content: "";
+	position: absolute;
+	height: 100%;
+	left: 10px;
+	right: 10px;
+	z-index: -1;
+	background: #F39B00;
+}
+
+.stamp:after{
+	content: "";
+	position: absolute;
+	top: 10px;
+	bottom: 10px;
+	left: 10px;
+	right: 10px;
+	box-shadow: 0px 0px 0px 20px rgba(0,0,0,0.05);
+	z-index: -2;
+}
+/*设置过渡渐变*/
+.stamp i{
+	position: absolute;
+	left: 20%;
+	top: 45px;
+	width: 390px;
+	height: 190px;
+	background-color: rgba(255,255,255,0.15);
+	transform: rotate(-30deg);
+}
+
+.stamp .par{
+	float: left;
+	width: 220px;
+	border-right: 2px dashed rgba(255,255,255,0.3);
+	text-align: left;
+}
+
+.stamp .par p{
+	color: #fff;
+	font-size: 16px;
+	line-height: 21px;
+}
+
+.stamp .par span{
+	font-size: 50px;
+	color: #FFFFFF;
+	margin-right: 5px;
+	line-height: 65px;
+}
+
+.stamp .par .sign{
+	font-size: 34px;
+}
+
+.stamp .par sub{
+	position: relative;
+	top: -5px;
+	color: rgba(255,255,255,0.8);
+}
+
+.stamp .copy{
+	display: inline-block;
+	padding: 21px 30px;
+	width: 100px;
+	/*垂直对齐方式：把元素的底端，与父元素元素字体的底端对齐*/
+	vertical-align: text-bottom;
+	font-size: 30px;
+	color: white;
+	text-align: center;
+	/*默认值*/
+	line-height: inherit;
+}
+
+.stamp .copy p{
+	font-size: 16px;
+	margin-top: 15px;
+}
