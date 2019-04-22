@@ -1,0 +1,113 @@
+@charset "utf-8";
+
+*{
+	margin: 0;
+	padding: 0;
+}
+
+body{
+	background:url(../img/2.jpg);
+	background-size: 100%;
+}
+div{
+	position: absolute;
+	left: 50%;
+}
+div:nth-child(1){
+	background:url(../img/fsw.png);
+	width: 768px;
+	height: 768px;
+	margin-left: -384px;
+	animation: zhuan 60s infinite linear;
+}
+
+@keyframes zhuan{
+	from{}
+	to{transform: rotate(360deg);}
+}
+div:nth-child(2){
+	width: 247px;
+	height: 490px;
+	background: url(../img/bracketsmall.png) no-repeat;
+	top: 400px;
+	margin-left: -123px;
+	z-index: -1;
+}
+div:nth-child(3){
+	width: 358px;
+	height: 529px;
+	background: url(../img/bracket.png) no-repeat;
+	margin-left: -180px;
+	top: 371px;
+}
+div:nth-child(4){
+	width: 577px;
+	height: 257px;
+	background: url(../img/big-title.png);
+	margin-left:-288px;
+	top: 262px;
+}
+div:nth-child(5){
+	width: 413px;
+	height: 139px;
+	background: url(../img/title.png);
+	margin-left: -206px;
+	top: 455px;
+}
+
+li{
+	position: absolute;
+	width: 130px;
+	height: 170px;
+	/*去掉无序列表小黑点*/
+	list-style: none;
+	animation: person 60s infinite linear;
+	/*调整旋转基点*/
+	transform-origin: 50% 40%;	
+}
+
+@keyframes person{
+	from{}
+	to{transform: rotate(-360deg);}
+}
+
+li:nth-child(1){
+	background: url(../img/girl.png);
+	left: 55px;
+	top: 100px;
+}
+li:nth-child(2){
+	background: url(../img/girls.png);
+	left: 319px;
+	top: 0;
+}
+li:nth-child(3){
+	background: url(../img/dog.png);
+	left: 580px;
+	top: 85px;
+}
+li:nth-child(4){
+	background: url(../img/mudog.png);
+	left: 665px;
+	top: 350px;
+}
+li:nth-child(5){
+	background: url(../img/boy.png);
+	left: 0;
+	top: 350px;
+}
+li:nth-child(6){
+	background: url(../img/mimi.png);
+	left: 90px;
+	top: 590px;
+}
+li:nth-child(7){
+	background: url(../img/hairboy.png);
+	left: 327px;
+	top: 685px;
+}
+li:nth-child(8){
+	background: url(../img/shamegirl.png);
+	left: 590px;
+	top: 540px;
+}
