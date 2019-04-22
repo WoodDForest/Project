@@ -1,0 +1,77 @@
+@charset "utf-8";
+
+*{
+	margin: 0;
+	padding: 0;
+}
+
+body{
+	background: papayawhip;
+}
+
+#box{
+	position: relative;
+	width: 720px;
+	height: 344px;
+	margin: 50px auto;
+	border: 2px solid orange;
+	overflow: hidden;
+}
+
+.btnleft{
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	left: 0;
+	top: 130px;
+	z-index: 9;
+}
+.btnright{
+	position: absolute;
+	width: 50px;
+	height: 50px;
+	right: 0;
+	top: 130px;
+	z-index: 9;
+}
+
+#imgbox{
+	position: absolute;
+	width: 1440px;
+	height: 344px;
+	top: 0;
+	left: 0;
+}
+
+#imgbox img{
+	position: absolute;
+	left: 720px;
+	top: 0;
+}
+
+#list{
+	position: absolute;
+	right: 50px;
+	bottom: 20px;
+	z-index: 10;
+}
+
+#list li{
+	width: 20px;
+	height: 20px;
+	border: 2px solid mediumpurple;
+	float: left;
+	list-style: none;/*去掉小黑点*/
+	margin: 0 5px;
+	border-radius: 50%;
+}
+
+#box .first{
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+/*定义一个*/
+.bg{
+	background: dodgerblue;
+}
